@@ -7,7 +7,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-const ExchangeScans string = "CyobsScans"
+const ExchangeScans string = "RabbitLog"
 
 func main() {
 	// Get the connection string from the environment variable
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// We create an exahange that will bind to the queue to send and receive messages
-	// In this case the Exchange have the name CyobsScans and kind "Topic"
+	// In this case the Exchange have the name RabbitLog and kind "Topic"
 	err = channel.ExchangeDeclare(ExchangeScans, "topic", true, false, false, false, nil)
 
 	if err != nil {
@@ -60,7 +60,7 @@ func main() {
 	}
 
 	// We publish the message to the exchange we created earlier
-	// exchange name "CyobsScans" and the bind-key is "random-key"
+	// exchange name "RabbitLog" and the bind-key is "random-key"
 	err = channel.Publish(ExchangeScans, "random-key", false, false, message)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func main() {
 	// We bind the queue to the exchange to send and receive data from the queue
 	// queue: test
 	// #: All keys.
-	// ExchangeScans: CyobsScans.
+	// ExchangeScans: RabbitLog.
 	err = channel.QueueBind("test", "#", ExchangeScans, false, nil)
 
 	if err != nil {
